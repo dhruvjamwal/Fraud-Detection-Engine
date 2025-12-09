@@ -1,5 +1,4 @@
 package org.example.model;
-
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -18,8 +17,6 @@ public class Transaction {
     private boolean isFraud;
     private String fraudReason;  
     private LocalDateTime timestamp;
-
-
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
