@@ -13,15 +13,13 @@ public class Transaction {
 
     private String accountId;
     private Double amount;
-    private String merchant;      // New field
+    private String merchant;     
     private String type;
     private boolean isFraud;
-    private String fraudReason;   // New field
+    private String fraudReason;  
     private LocalDateTime timestamp;
 
-    // ==========================
-    //   GETTERS AND SETTERS
-    // ==========================
+
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
