@@ -1,1 +1,2 @@
-
+Upgraded the service layer from static validation to stateful analysis, enabling real-time Velocity Checks (detecting rapid-fire bot attacks) and Historical Profiling.
+Built a dedicated SimulationEngine that autonomously generates synthetic fraud scenarios—including "Impossible Travel" and "Device Mismatch" to validate the systems detection accuracy without manual input.
