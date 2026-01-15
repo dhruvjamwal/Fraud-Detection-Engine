@@ -44,12 +44,12 @@ In the modern digital banking landscape, speed and accuracy are paramount. This 
 * **Container:** Tomcat 10.1.15
 * **Testing:** Postman
 * **IDE:** IntelliJ IDEA / VS Code
-
 ---
-## 🔌 API Endpoints
-Core Transaction Flow
 
-Code snippet
+## 🔌 API Endpoints
+
+### Core Transaction Flow
+```mermaid
 sequenceDiagram
     participant Client
     participant API as API Gateway
@@ -63,7 +63,6 @@ sequenceDiagram
     Engine->>Engine: Apply 10+ Rules
     Engine-->>API: Risk Result (BLOCK/ALLOW)
     API-->>Client: JSON Response <50ms
-
 
 ## 🏗️ System Architecture
 
