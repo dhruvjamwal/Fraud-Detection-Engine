@@ -15,8 +15,8 @@ public class EmailService {
     public void sendFraudAlert(Transaction t) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("prismaticgaming1.0@gmail.com");
-            message.setTo("prismaticgaming1.0@gmail.com");
+            message.setFrom("*****************");
+            message.setTo("********************");
             message.setSubject("FRAUD DETECTED: Account " + t.getAccountId());
             message.setText("Security Alert:\n\nTransaction #" + t.getId() + " was blocked.\nAmount: " + t.getAmount() + "\nReason: " + t.getFraudReason());
 
