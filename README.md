@@ -46,6 +46,24 @@ In the modern digital banking landscape, speed and accuracy are paramount. This 
 * **IDE:** IntelliJ IDEA / VS Code
 
 ---
+## 🔌 API Endpoints
+Core Transaction Flow
+
+Code snippet
+sequenceDiagram
+    participant Client
+    participant API as API Gateway
+    participant Engine as Fraud Engine
+    participant DB as Database
+
+    Client->>API: POST /api/v1/transactions
+    API->>Engine: Validate & Score
+    Engine->>DB: Fetch History
+    DB-->>Engine: Historical Data
+    Engine->>Engine: Apply 10+ Rules
+    Engine-->>API: Risk Result (BLOCK/ALLOW)
+    API-->>Client: JSON Response <50ms
+
 
 ## 🏗️ System Architecture
 
@@ -60,18 +78,3 @@ graph TD
     Engine -->|Read/Write| DB[(MySQL Database)]
     Service -->|Real-time Updates| Dash[React Dashboard]
     Service -->|Alerts| Email[Email Notification Service]
-
-
-sequenceDiagram
-    participant Client
-    participant API as API Gateway
-    participant Engine as Fraud Engine
-    participant DB as Database
-
-    Client->>API: POST /api/v1/transactions
-    API->>Engine: Validate & Score
-    Engine->>DB: Fetch History
-    DB-->>Engine: Historical Data
-    Engine->>Engine: Apply 10+ Rules
-    Engine-->>API: Risk Result (BLOCK/ALLOW)
-    API-->>Client: JSON Response <50ms
