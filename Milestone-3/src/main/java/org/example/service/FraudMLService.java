@@ -22,8 +22,7 @@ public class FraudMLService {
     public void init() {
 
         try {
-            // 1. DEFINE FEATURES (Inputs for the AI)
-            // We use: Amount, Hour of Day, and IsFraud (Target)
+
             Attribute amountAttr = new Attribute("amount");
             Attribute hourAttr = new Attribute("hour");
             Attribute fraudClass = new Attribute("isFraud", Arrays.asList("safe", "fraud"));
@@ -33,10 +32,8 @@ public class FraudMLService {
             attributes.add(hourAttr);
             attributes.add(fraudClass);
 
-            // 2. CREATE SYNTHETIC TRAINING DATA
-            // (In a real company, you would load this from a CSV file)
             dataStructure = new Instances("TransactionData", attributes, 100);
-            dataStructure.setClassIndex(2); // The last attribute is the target (fraud/safe)
+            dataStructure.setClassIndex(2); 
 
             for (int i = 0; i < 15; i++) {
                 addTrainingData(15.0, 4, "fraud");
@@ -46,16 +43,13 @@ public class FraudMLService {
                 addTrainingData(5000.0, 14, "safe");
             }
 
-            // Teach the AI: "Small amounts are usually safe"
             for (int i = 0; i < 50; i++) {
                 addTrainingData(10.0 + (Math.random() * 500), 12, "safe");
             }
-            // Teach the AI: "Large amounts at 3 AM are suspicious"
             for (int i = 0; i < 20; i++) {
                 addTrainingData(20000.0 + (Math.random() * 50000), 3, "fraud");
             }
 
-            // 3. TRAIN THE RANDOM FOREST MODEL
             model = new RandomForest();
             model.buildClassifier(dataStructure);
             System.out.println(" ML Model Trained Successfully (Random Forest)");
@@ -74,7 +68,6 @@ public class FraudMLService {
         dataStructure.add(instance);
     }
 
-    // 4. PREDICT FUNCTION
     public double predictRisk(Transaction t) {
         try {
             DenseInstance newTxn = new DenseInstance(3);
@@ -82,15 +75,13 @@ public class FraudMLService {
             newTxn.setValue(attributes.get(1), t.getTimestamp().getHour());
             newTxn.setDataset(dataStructure); // Connect to structure
 
-            // Returns [probability_safe, probability_fraud]
             double[] probabilities = model.distributionForInstance(newTxn);
 
-            // Return the probability of fraud (0.0 to 1.0)
             return probabilities[1];
 
         } catch (Exception e) {
             System.err.println("ML Prediction Error: " + e.getMessage());
-            return 0.0; // Default to safe if ML fails
+            return 0.0; 
         }
     }
 }
