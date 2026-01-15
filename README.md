@@ -61,10 +61,7 @@ graph TD
     Service -->|Real-time Updates| Dash[React Dashboard]
     Service -->|Alerts| Email[Email Notification Service]
 
-## 🔌 API Endpoints
 
-### Core Transaction Flow
-```mermaid
 sequenceDiagram
     participant Client
     participant API as API Gateway
