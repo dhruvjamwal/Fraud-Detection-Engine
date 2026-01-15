@@ -60,3 +60,21 @@ graph TD
     Engine -->|Read/Write| DB[(MySQL Database)]
     Service -->|Real-time Updates| Dash[React Dashboard]
     Service -->|Alerts| Email[Email Notification Service]
+
+## 🔌 API Endpoints
+
+### Core Transaction Flow
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API as API Gateway
+    participant Engine as Fraud Engine
+    participant DB as Database
+
+    Client->>API: POST /api/v1/transactions
+    API->>Engine: Validate & Score
+    Engine->>DB: Fetch History
+    DB-->>Engine: Historical Data
+    Engine->>Engine: Apply 10+ Rules
+    Engine-->>API: Risk Result (BLOCK/ALLOW)
+    API-->>Client: JSON Response <50ms
