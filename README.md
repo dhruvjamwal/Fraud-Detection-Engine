@@ -64,3 +64,15 @@ sequenceDiagram
     Engine->>Engine: Apply 10+ Rules
     Engine-->>API: Risk Result (BLOCK/ALLOW)
     API-->>Client: JSON Response <50ms
+```
+## 🏗 System Architecture
+The system follows a layered micro-architecture ensuring separation of concerns between the detection logic, data persistence, and user interface.
+```mermaid
+graph TD
+    User[User / ATM / POS] -->|HTTP Request| API[Spring Boot REST API]
+    API -->|Validation| Controller[Transaction Controller]
+    Controller --> Service[Fraud Detection Service]
+    Service -->|Analysis| Engine[Rule Engine & Risk Scoring]
+    Engine -->|Read/Write| DB[(MySQL Database)]
+    Service -->|Real-time Updates| Dash[React Dashboard]
+    Service -->|Alerts| Email[Email Notification Service]
