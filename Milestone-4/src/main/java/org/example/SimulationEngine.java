@@ -22,20 +22,17 @@ public class SimulationEngine implements CommandLineRunner {
         String[] countries = {"IN", "US", "CN", "RU", "BR"};
         Random rand = new Random();
 
-        // 1. Generate 50 Random Historical Transactions
         for (int i = 0; i < 55; i++) {
             String user = users[rand.nextInt(users.length)];
             String merch = merchants[rand.nextInt(merchants.length)];
             String country = countries[rand.nextInt(countries.length)];
-            double amount = 10 + (rand.nextDouble() * 60000); // Random amount 10 to 60k
+            double amount = 10 + (rand.nextDouble() * 60000);
 
-            // Generate some fraud scenarios specifically
             String ip = "192.168.1." + rand.nextInt(255);
             String device = "Device_" + rand.nextInt(999);
 
             createTxn(user, amount, merch, "GENERAL", country, ip, device);
 
-            // Add a small delay so timestamps differ slightly (optional, good for sorting)
             Thread.sleep(10);
         }
 
