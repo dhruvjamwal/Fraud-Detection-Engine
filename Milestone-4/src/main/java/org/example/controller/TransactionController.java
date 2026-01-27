@@ -47,7 +47,6 @@ public class TransactionController {
         t.setTimestamp(LocalDateTime.now());
         t.setAccountId("SIM_USER_123");
 
-        // These fields support the 'Depth Analysis' sidebar in index.html
         t.setIpAddress("192.168.1." + (int)(Math.random() * 255));
         t.setDeviceId("Device_" + (int)(Math.random() * 1000));
 
