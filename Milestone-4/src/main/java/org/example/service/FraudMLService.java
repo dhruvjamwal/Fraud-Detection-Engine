@@ -33,8 +33,6 @@ public class FraudMLService {
             dataStructure = new Instances("TransactionData", attributes, 100);
             dataStructure.setClassIndex(attributes.size() - 1);
 
-            // 2. ENHANCED TRAINING DATA
-            // High value + Midnight = High Fraud
             for (int i = 0; i < 25; i++) {
                 addTrainingData(75000.0, 2, "fraud");
             }
@@ -73,11 +71,10 @@ public class FraudMLService {
 
             double[] probabilities = model.distributionForInstance(newTxn);
 
-            // probabilities[1] is the fraud probability (0.0 to 1.0)
             return probabilities[1];
 
         } catch (Exception e) {
-            return 0.15; // Default safe baseline if inference fails
+            return 0.15; 
         }
     }
 }
