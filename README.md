@@ -17,7 +17,7 @@ In the modern digital banking landscape, speed and accuracy are paramount. This 
 ### 🏆 Real-World Impact
 | Metric | Performance |
 | :--- | :--- |
-| **Fraud Prevention** | ✅ **$7M+** prevented in potential losses |
+| **Fraud Prevention** | ✅ **500+** prevented in potential losses |
 | **Detection Accuracy** | ✅ **100%** detection rate on known patterns |
 | **Latency** | ✅ **<50ms** average response time |
 | **Uptime** | ✅ **99.95%** system availability |
