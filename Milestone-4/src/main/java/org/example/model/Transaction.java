@@ -22,7 +22,7 @@ public class Transaction {
     private boolean isFraud;
     private String fraudReason;
     private LocalDateTime timestamp;
-    private String location; // Used for the jsVectorMap coordinates or country codes
+    private String location;
 
     @Column(name = "ml_score")
     private Double mlScore;
