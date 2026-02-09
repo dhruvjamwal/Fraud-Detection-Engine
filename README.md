@@ -21,13 +21,26 @@
 
 ## 📂 Project Structure
 
-```mermaid
 Fraud-Detection-Engine/
-├── index.html      # Main application structure and layout
-├── style.css       # Core styling, animations, and dark theme variables
-├── script.js       # Application logic, chart rendering, and simulation handling
-└── README.md       # Project documentation
-```
+├── .idea/                         # IntelliJ IDEA project configuration
+├── Frontend/                      # Dashboard Interface (Web Layer)
+│   ├── index.html                 # Main entry point for the Fraud Dashboard
+│   ├── style.css                  # Dark-mode styling and animations
+│   └── script.js                  # UI logic, Chart.js rendering, and API connectors
+├── Milestone-1/                   # Phase 1: Requirement Analysis & Basic Setup
+├── Milestone-2/                   # Phase 2: Database Design & Initial API
+├── Milestone-3/                   # Phase 3: Core Fraud Rules Implementation
+├── Milestone-4/                   # Phase 4: Integration & Optimization
+├── src/                           # ☕ Java Backend Source (Spring Boot)
+│   ├── main/java/                 # Core business logic, Services, and Controllers
+│   └── main/resources/            # Application properties and SQL configs
+├── ML_Model.py                    # 🧠 Python Script for Random Forest logic
+├── Dhruv_Jamwal_Agile_file.xlsx   # 📅 Agile Sprint tracking and Project Management
+├── pom.xml                        # 🐘 Maven Build Configuration
+├── .gitignore                     # Git exclusion rules
+├── LICENSE                        # ⚖️ MIT License
+└── README.md                      # 📖 Project Documentation
+
 
 ## 🎯 Project Overview
 
