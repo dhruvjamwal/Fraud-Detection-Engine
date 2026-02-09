@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection</title>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/jsvectormap"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsvectormap/dist/maps/world.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap/dist/css/jsvectormap.min.css" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="login-layer">
+        <div class="login-box">
+            <div style="margin-bottom: 20px;"><i data-lucide="shield-check" size="48" color="#dc2626"></i></div>
+            <h2 style="margin-bottom: 10px; color: white;">DIGITAL BANKING FRAUD DETECTION</h2>
+            <p style="color: #71717a; margin-bottom: 20px;">Restricted Access Gateway</p>
+            <input type="password" id="login-pass" class="login-input" placeholder="Enter Access Key">
+            <button class="btn-login" onclick="App.login()">AUTHENTICATE</button>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <div id="app-root" style="display: none; width: 100%; height: 100%;">
+        
+        <div class="sidebar">
+            <div class="logo"><i data-lucide="radar" color="#dc2626"></i> FRAUD DETECTION ENGINE </div>
+            
+            <div class="nav-section">ANALYTICS</div>
+            <div class="nav-item active" onclick="Nav.to('dashboard', this)"><i data-lucide="layout-dashboard" size="16"></i> Dashboard</div>
+            <div class="nav-item" onclick="Nav.to('neural', this)"><i data-lucide="brain-circuit" size="16"></i> Neural Inspector</div>
+            
+            <div class="nav-section">OPERATIONS</div>
+            <div class="nav-item" onclick="Nav.to('simulation', this)"><i data-lucide="flask-conical" size="16"></i> Threat Injection</div>
+            <div class="nav-item" onclick="Nav.to('policy', this)"><i data-lucide="sliders" size="16"></i> Policy Manager</div>
+            <div class="nav-item" onclick="Nav.to('blacklist', this)"><i data-lucide="list-x" size="16"></i> Blacklist Audit</div>
+            <div class="nav-item" onclick="Nav.to('inspect', this)"><i data-lucide="search" size="16"></i> Deep Inspector</div>
+
+            <div class="nav-section">DEPTH ANALYSIS</div>
+            <div id="depth-view" class="card" style="padding:15px; border:1px solid #333; margin-bottom:10px; font-size:0.8rem; color:#aaa; display:none; height: auto;">
+                <div style="margin-bottom:8px; border-bottom:1px solid #333; padding-bottom:4px; font-weight:bold; color:#fff">Selected Transaction</div>
+                <div style="margin-bottom:5px;"><span style="color:#666">IP:</span> <br><span id="d-ip" style="color:#fff; font-family:var(--font-num);">--</span></div>
+                <div style="margin-bottom:5px;"><span style="color:#666">Device:</span> <br><span id="d-dev" style="color:#fff;">--</span></div>
+                <div style="margin-bottom:5px;"><span style="color:#666">Reason:</span> <br><span id="d-reason" style="color:#ef4444;">--</span></div>
+                <div><span style="color:#666">Time:</span> <br><span id="d-time" style="color:#fff; font-family:var(--font-num);">--</span></div>
+            </div>
+
+            <div style="flex:1"></div>
+            <div class="card" style="padding:10px; border:1px solid #333; background: #000; margin-bottom: 0; height: auto;">
+                <div class="flex justify-between" style="font-size:0.7rem; color:#666; display: flex; justify-content: space-between;">
+                    <span>API STATUS</span>
+                    <span id="api-status" style="color: #10b981;">ONLINE</span>
+                </div>
+                <div style="font-size:0.65rem; color:#444; margin-top:5px;">Latency: <span id="api-latency">12</span>ms</div>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="top-bar">
+                <div style="font-size:0.9rem; font-weight:600; color:white;">System Overview</div>
+                <div class="flex items-center gap-20" style="display:flex; align-items:center; gap:20px; font-size:0.8rem; color:#888;">
+                    <span id="clock">--:--:--</span>
+                    <button onclick="Backend.reset()" style="background:#7f1d1d; border:1px solid #991b1b; color:white; padding:4px 10px; border-radius:4px; cursor:pointer; font-weight:bold;">RESET DB</button>
+                    <button onclick="Backend.sync(true)" style="background:none; border:1px solid #333; color:white; padding:4px 10px; border-radius:4px; cursor:pointer;">REFRESH DB</button>
+                    <div style="width:28px; height:28px; background:#dc2626; border-radius:50%; display:flex; justify-content:center; align-items:center; color:white; font-size:0.7rem; font-weight:bold;">AD</div>
+                </div>
+            </div>
+
+            <div class="view-container">
+
+                <div id="dashboard" class="view-section active">
+                    <div class="dash-grid-top">
+                        <div class="card">
+                            <div class="card-header">TOTAL VOLUME</div>
+                            <div class="card-value" id="kpi-total">0</div>
+                            <div class="card-sub text-green" style="color:#10b981">▲ 12% vs last hr</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">CLEAN TRAFFIC</div>
+                            <div class="card-value" id="kpi-clean" style="color:#10b981">0</div>
+                            <div class="card-sub">98.2% Clearance</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">FRAUD BLOCKS</div>
+                            <div class="card-value" id="kpi-fraud" style="color:#ef4444">0</div>
+                            <div class="card-sub">Triggered Rules</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">ML PLUGIN</div>
+                            <div class="card-value" style="color:#3b82f6">96.4%</div>
+                            <div class="card-sub">Random Forest</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">SLA TIME</div>
+                            <div class="card-value">40ms</div>
+                            <div class="card-sub">Avg Response</div>
+                        </div>
+                    </div>
+
+                    <div class="dash-grid-mid">
+                        <div class="card alert-box">
+                            <div>
+                                <div class="card-header">CRITICAL ALERTS</div>
+                                <div class="card-value" id="alert-count">0</div>
+                                <div style="color:#fca5a5; font-size:0.8rem; margin-top:5px;">Immediate Action Required</div>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; border-top:1px solid #7f1d1d; padding-top:10px;">
+                                <span style="color:#fca5a5; font-size:0.8rem;">SLA Breach</span>
+                                <span style="color:white; font-weight:bold;">7%</span>
+                            </div>
+                        </div>
+
+                        <div class="card" style="padding:0; overflow-y: hidden; display: flex; flex-direction: column;">
+                            <div style="padding:10px 15px; border-bottom:1px solid var(--border); font-weight:600; font-size:0.8rem; display:flex; justify-content:space-between; background: var(--bg-card); flex-shrink: 0;">
+                                <span>Live Ledger</span>
+                                <div style="display:flex; gap:10px;">
+                                    <button onclick="Backend.sync(true)" style="background:none; border:none; color:#10b981; cursor:pointer; font-weight:bold;">↻ REFRESH</button>
+                                    <button onclick="Report.downloadPDF()" style="background:none; border:none; color:#3b82f6; cursor:pointer;">PDF Report</button>
+                                </div>
+                            </div>
+                            <div style="overflow-y: auto; flex-grow: 1;">
+                                <table class="table-compact" id="txn-table">
+                                    <thead><tr><th style="position: sticky; top: 0; background: var(--bg-card);">ID</th><th style="position: sticky; top: 0; background: var(--bg-card);">TIME</th><th style="position: sticky; top: 0; background: var(--bg-card);">MERCHANT</th><th style="position: sticky; top: 0; background: var(--bg-card);">AMT</th><th style="position: sticky; top: 0; background: var(--bg-card);">ML SCORE</th><th style="position: sticky; top: 0; background: var(--bg-card);">STATUS</th></tr></thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card" style="align-items:center; justify-content:center;">
+                            <div class="card-header" style="width:100%">RISK STATUS</div>
+                            <div style="height:140px; width:140px; position:relative; margin:20px 0;">
+                                <canvas id="chart-gauge"></canvas>
+                                <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center;">
+                                    <div style="font-size:1.8rem; font-weight:700; color:white;" id="risk-score">Low</div>
+                                    <div style="font-size:0.6rem; color:#888;">Level</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dash-grid-bot">
+                        <div class="card" style="padding:0;">
+                            <div style="position:absolute; top:15px; left:15px; z-index:10; font-weight:600; text-shadow: 0 2px 4px black;">
+                                Global Threat Map
+                            </div>
+                            <div class="map-container">
+                                <div class="radar-scan"></div> 
+                                <div class="map-overlay"></div> 
+                                <div class="map-hud-top">
+                                    <div class="hud-box"><span class="blip"></span>LIVE FEED</div>
+                                    <div class="hud-box">THREAT:L1<span id="map-target-count" style="color:white; font-weight:bold;"></span></div>
+                                </div>
+                                <div id="world-map"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="sparkline-container">
+                            <div class="spark-card">
+                                <div class="spark-title">SUSPICIOUS ACTIVITY</div>
+                                <div class="spark-val">152 trends</div>
+                                <div style="flex:1"><canvas id="chart-s1"></canvas></div>
+                            </div>
+                            <div class="spark-card">
+                                <div class="spark-title">SCAM ATTEMPTS</div>
+                                <div class="spark-val">62 trends</div>
+                                <div style="flex:1"><canvas id="chart-s2"></canvas></div>
+                            </div>
+                            <div class="spark-card">
+                                <div class="spark-title">INQUIRY RATE</div>
+                                <div class="spark-val">14 trends</div>
+                                <div style="flex:1"><canvas id="chart-s3"></canvas></div>
+                            </div>
+                            <div class="spark-card">
+                                <div class="spark-title">RESOLVED CASES</div>
+                                <div class="spark-val" style="color:#10b981">38 trends</div>
+                                <div style="flex:1"><canvas id="chart-s4"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="neural" class="view-section">
+                    <h2 style="margin-bottom:20px;">Neural Inspector</h2>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                        <div class="card" style="height: auto;">
+                            <h3 style="margin-bottom:15px; color:var(--text-muted);">Manual Inference</h3>
+                            <div style="margin-bottom:15px;">
+                                <label style="display:block; margin-bottom:5px; font-size:0.8rem; color:#888;">Transaction Amount (INR)</label>
+                                <input type="number" id="insp-amt" class="login-input" value="75000" style="text-align:left;">
+                            </div>
+                            <div style="margin-bottom:15px;">
+                                <label style="display:block; margin-bottom:5px; font-size:0.8rem; color:#888;">Merchant ID</label>
+                                <select id="insp-merch" class="login-input" style="text-align:left;">
+                                    <option value="RetailStore">Retail Store (Low Risk)</option>
+                                    <option value="CryptoStore">Crypto Exchange (High Risk)</option>
+                                    <option value="Casino">Online Casino (Med Risk)</option>
+                                </select>
+                            </div>
+                            <button onclick="Backend.manualCheck()" class="btn-login">RUN MODEL</button>
+                            
+                            <div id="insp-result" style="margin-top:20px; padding:20px; border:1px dashed var(--border); text-align:center;">
+                                <span style="color:#666;">Waiting for input...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="simulation" class="view-section">
+                    <div class="flex justify-between items-center" style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                        <div style="display:flex; align-items:center; gap:15px;">
+                            <h2 style="margin:0;">Active Threat Response</h2>
+                            <div style="background:rgba(220, 38, 38, 0.2); border:1px solid #7f1d1d; color:#f87171; padding:4px 8px; border-radius:4px; font-size:0.7rem; font-weight:bold; display:flex; align-items:center; gap:6px;">
+                                <span style="display:block; width:6px; height:6px; background:#ef4444; border-radius:50%; animation:pulse 1s infinite;"></span> LIVE
+                            </div>
+                        </div>
+                        <div style="font-size:0.8rem; color:#666; font-family:var(--font-num);">SECure_ID: 99AX441</div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 300px 1fr; gap:20px; height: 500px;">
+                        
+                        <div style="display:flex; flex-direction:column; gap:15px;">
+                            
+                            <div class="card" style="height:auto; border-left:4px solid #fff;">
+                                <div class="card-header" style="color:white;">SMTP GATEWAY</div>
+                                <div style="font-size:0.8rem; color:#888; margin:10px 0;">Automated alert delivery System for high-velocity fraud chains.</div>
+                                <button onclick="Backend.triggerSim('email_test')" style="background:var(--bg-element); border:1px solid var(--border); color:white; padding:10px; border-radius:4px; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; transition:0.2s;" onmouseover="this.style.background='#27272a'" onmouseout="this.style.background='var(--bg-element)'">
+                                    <i data-lucide="mail-warning" size="16"></i> Trigger E-Mail Alert!
+                                </button>
+                            </div>
+
+                            <div class="card" style="flex:1; border-left:4px solid #ef4444; display:flex; flex-direction:column; justify-content:space-between;">
+                                <div>
+                                    <div class="card-header" style="color:#fca5a5;">ENFORCEMENT PROTOCOL</div>
+                                    <div style="font-size:0.8rem; color:#888; margin-top:10px;">
+                                        Identified <strong style="color:white;" id="threat-count">0</strong> active threat clusters.
+                                    </div>
+                                    <ul style="margin-top:15px; font-size:0.75rem; color:#666; padding-left:20px; line-height:1.6;">
+                                        <li>Isolate IP Subnets</li>
+                                        <li>Revoke Session Tokens</li>
+                                        <li>Update Rules</li>
+                                        <li>Update Security</li>
+
+                                    </ul>
+                                </div>
+                                
+                                <button onclick="Ops.blockAll()" style="background: linear-gradient(45deg, #7f1d1d, #991b1b); border:1px solid #ef4444; color:white; padding:15px; border-radius:4px; cursor:pointer; font-weight:bold; letter-spacing:1px; box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4); text-transform:uppercase;">
+                                    <i data-lucide="shield-alert" size="16" style="vertical-align:text-bottom; margin-right:5px;"></i> Execute Block
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card" style="padding:0; overflow:hidden; display:flex; flex-direction:column;">
+                            <div style="padding:15px; border-bottom:1px solid var(--border); background:var(--bg-element); display:flex; justify-content:space-between; align-items:center;">
+                                <span style="font-weight:600; color:#e4e4e7;">Detected Threat</span>
+                                <button onclick="Ops.scan()" style="background:none; border:none; color:#3b82f6; cursor:pointer; font-size:0.75rem; font-weight:bold;">SCAN NETWORK</button>
+                            </div>
+                            
+                            <div style="overflow-y:auto; flex:1;">
+                                <table class="table-compact" id="threat-table">
+                                    <thead>
+                                        <tr>
+                                            <th>SEVERITY</th>
+                                            <th>THREAT SIGNATURE</th>
+                                            <th>ORIGIN</th>
+                                            <th>AFFECTED USERS</th>
+                                            <th>STATUS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        </tbody>
+                                </table>
+                            </div>
+                            
+                            <div style="padding:10px 15px; background:#000; border-top:1px solid var(--border); font-family:var(--font-num); font-size:0.7rem; color:#10b981;">
+                                > Waiting for command...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="policy" class="view-section">
+                    <h2 style="margin-bottom:20px;">Policy Manager</h2>
+                    <div class="card" style="height: 500px; padding:0; overflow: hidden; display: flex; flex-direction: column;">
+                        
+                        <div style="padding:15px; background:var(--bg-element); border-bottom:1px solid var(--border); font-weight:bold; color:white; display:flex; justify-content:space-between;">
+                            <span>Transaction Input Rules</span>
+                            <span style="font-size:0.8rem; color:#10b981;">ALL SYSTEMS OPERATIONAL</span>
+                        </div>
+
+                        <div style="overflow-y: auto; flex:1;">
+                            
+                            <div class="flex justify-between items-center" style="display:flex; justify-content:space-between; padding:15px; border-bottom:1px solid var(--border);">
+                                <div><div style="font-weight:bold;">Rule 1: Amount Analysis</div><div style="font-size:0.8rem; color:#666;">Threshold & Cap Checks (> ₹50k)</div></div>
+                                <div style="color:#10b981; font-weight:bold; font-size:0.8rem;">ACTIVE</div>
+                            </div>
+                            <div class="flex justify-between items-center" style="display:flex; justify-content:space-between; padding:15px; border-bottom:1px solid var(--border);">
+                                <div><div style="font-weight:bold;">Rule 2: Location Risk</div><div style="font-size:0.8rem; color:#666;">High-Risk Country Filtering</div></div>
+                                <div style="color:#10b981; font-weight:bold; font-size:0.8rem;">ACTIVE</div>
+                            </div>
+                             <div class="flex justify-between items-center" style="display:flex; justify-content:space-between; padding:15px; border-bottom:1px solid var(--border);">
+                                <div><div style="font-weight:bold;">Rule 3: Timing Patterns</div><div style="font-size:0.8rem; color:#666;">Late Night/Odd Hour Detection</div></div>
+                                <div style="color:#10b981; font-weight:bold; font-size:0.8rem;">ACTIVE</div>
+                            </div>
+                            </div>
+                    </div>
+                </div>
+
+                 <div id="blacklist" class="view-section">
+                    <div class="flex justify-between items-center" style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                        <h2>Blacklist Audit</h2>
+                        <button onclick="Backend.sync()" style="background:#3b82f6; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">REFRESH</button>
+                    </div>
+                    <div class="card" style="padding:0; height: auto;">
+                        <table class="table-compact" id="blacklist-table">
+                            <thead><tr><th>MERCHANT</th><th>REASON</th><th>TIME</th><th>ACTION</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+               </div>
+               
+               <div id="inspect" class="view-section">
+                    <div class="flex justify-between items-center" style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                        <div style="display:flex; align-items:center; gap:20px;">
+                            <h2>Deep Inspect</h2>
+                            <div style="background:var(--bg-element); padding:4px; border-radius:4px; border:1px solid var(--border); display:flex; gap:5px;">
+                                <button onclick="Inspector.filter('all')" class="filter-btn active" style="background:var(--bg-card); color:var(--text-main); border:none; padding:4px 12px; border-radius:4px; cursor:pointer; font-size:0.75rem;">ALL</button>
+                                <button onclick="Inspector.filter('clean')" class="filter-btn" style="background:transparent; color:var(--text-muted); border:none; padding:4px 12px; border-radius:4px; cursor:pointer; font-size:0.75rem;">SUCCESS</button>
+                                <button onclick="Inspector.filter('fraud')" class="filter-btn" style="background:transparent; color:var(--text-muted); border:none; padding:4px 12px; border-radius:4px; cursor:pointer; font-size:0.75rem;">FAILED</button>
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button onclick="Inspector.downloadPDF1()" style="background:none; border:1px solid #333; color:white; padding:4px 10px; border-radius:4px; cursor:pointer;">EXPORT LOGS</button>
+                             <button onclick="Backend.sync()" style="background:#3b82f6; color:white; border:none; padding:4px 10px; border-radius:4px; cursor:pointer;">SYNCING</button>
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1fr 320px; gap:15px;">
+                        <div class="card" style="padding:0; height: 450px; overflow-y: auto;">
+                            <table class="table-compact" id="inspect-table">
+                                <thead style="position: sticky; top: 0; background: var(--bg-card); z-index:10;">
+                                    <tr>
+                                        <th>TRACE ID</th>
+                                        <th>IP ADDRESS</th>
+                                        <th>DEVICE ENPRINT</th>
+                                        <th>STATUS</th> <th>REASON</th> </tr>
+                                </thead>
+                                <tbody>
+                                    </tbody>
+                            </table>
+                        </div>
+
+                        <div style="display:flex; flex-direction:column; gap:15px;">
+                            <div class="card" style="height:auto; border-top: 3px solid var(--primary-blue);">
+                                <div class="card-header">SYSTEM TRACE</div>
+                                <div class="card-value" style="font-size: 1.2rem;">ACTIVE</div>
+                                <div class="card-sub">Real-time Remediation Logs</div>
+                            </div>
+                            
+                            <div class="console-log" id="inspect-logs" style="flex:1; height: 315px; font-size: 0.7rem; color: #3b82f6; border-color: #1e3a8a; font-family: 'JetBrains Mono', monospace;">
+                                > Deep Inspector initialized...<br>
+                                > Port 8080 listening...<br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
