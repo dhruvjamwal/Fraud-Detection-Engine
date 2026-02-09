@@ -21,7 +21,6 @@
 
 ## 📂 Project Structure
 
-```mermaid
 Fraud-Detection-Engine/
 ├── .idea/                         # IntelliJ IDEA project configuration
 ├── Frontend/                      # Dashboard Interface (Web Layer)
@@ -41,7 +40,6 @@ Fraud-Detection-Engine/
 ├── .gitignore                     # Git exclusion rules
 ├── LICENSE                        # ⚖️ MIT License
 └── README.md                      # 📖 Project Documentation
-```
 
 ## 🎯 Project Overview
 
