@@ -8,7 +8,26 @@
 
 > A production-grade **Fraud Detection System** capable of processing financial transactions in **<50ms**. It utilizes intelligent rule-based algorithms, a real-time monitoring dashboard, and an automated simulation engine to detect and block fraudulent activities instantly.
 
+## ✨ Key Features
+
+* **📊 Live Analytics Dashboard**: Real-time KPI monitoring (Total Volume, Fraud Blocks, SLA Time) with dynamic charts.
+* **🌍 Global Threat Map**: Interactive 3D-style world map visualizing threat origins in real-time.
+* **🧠 Neural Inspector**: Interface to manually test specific transaction parameters against the fraud model.
+* **🧪 Threat Injection Simulator**: Tools to trigger simulated attacks (Velocity attacks, High-value fraud) to test system resilience.
+* **🛡️ Policy Manager**: View and manage active security rules (e.g., Geolocation Mismatch, Velocity Checks).
+* **📄 Automated Reporting**: One-click generation of PDF incident reports and deep inspection logs.
+* **🔐 Role-Based Access**: Secured login gateway with access key authentication.
 ---
+
+## 📂 Project Structure
+
+```mermaid
+Fraud-Detection-Engine/
+├── index.html      # Main application structure and layout
+├── style.css       # Core styling, animations, and dark theme variables
+├── script.js       # Application logic, chart rendering, and simulation handling
+└── README.md       # Project documentation
+```
 
 ## 🎯 Project Overview
 
@@ -21,7 +40,6 @@ In the modern digital banking landscape, speed and accuracy are paramount. This 
 | **Detection Accuracy** | ✅ **100%** detection rate on known patterns |
 | **Latency** | ✅ **<50ms** average response time |
 | **Uptime** | ✅ **99.95%** system availability |
-
 ---
 
 ## 🚀 Technology Stack
