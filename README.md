@@ -21,6 +21,7 @@
 
 ## 📂 Project Structure
 
+```text
 Fraud-Detection-Engine/
 ├── .idea/                         # IntelliJ IDEA project configuration
 ├── Frontend/                      # Dashboard Interface (Web Layer)
@@ -31,15 +32,16 @@ Fraud-Detection-Engine/
 ├── Milestone-2/                   # Phase 2: Database Design & Initial API
 ├── Milestone-3/                   # Phase 3: Core Fraud Rules Implementation
 ├── Milestone-4/                   # Phase 4: Integration & Optimization
-├── src/                           # ☕ Java Backend Source (Spring Boot)
+├── src/                           # Java Backend Source (Spring Boot)
 │   ├── main/java/                 # Core business logic, Services, and Controllers
 │   └── main/resources/            # Application properties and SQL configs
-├── ML_Model.py                    # 🧠 Python Script for Random Forest logic
-├── Dhruv_Jamwal_Agile_file.xlsx   # 📅 Agile Sprint tracking and Project Management
-├── pom.xml                        # 🐘 Maven Build Configuration
+├── ML_Model.py                    # Python Script for Random Forest logic
+├── Dhruv_Jamwal_Agile_file.xlsx   # Agile Sprint tracking and Project Management
+├── pom.xml                        # Maven Build Configuration
 ├── .gitignore                     # Git exclusion rules
-├── LICENSE                        # ⚖️ MIT License
-└── README.md                      # 📖 Project Documentation
+├── LICENSE                        # MIT License
+└── README.md                      # Project Documentation
+```
 
 ## 🎯 Project Overview
 
