@@ -1,4 +1,4 @@
-# 🏦 Advanced Bank Fraud Detection & Simulation Engine
+# 🏦 Advanced Banking Fraud Detection & Simulation Engine
 
 [![Java](https://img.shields.io/badge/Java-23-ED8B00?style=for-the-badge&logo=java&logoColor=white)](https://www.java.com/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.1.5-6DB33F?style=for-the-badge&logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
