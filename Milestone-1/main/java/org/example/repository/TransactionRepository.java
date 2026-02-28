@@ -7,9 +7,6 @@ import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    // 1. Find all frauds
     List<Transaction> findByIsFraudTrue();
-
-    // 2. Count transactions for an account in a specific time range (for Velocity Check)
     int countByAccountIdAndTimestampAfter(String accountId, LocalDateTime time);
 }
